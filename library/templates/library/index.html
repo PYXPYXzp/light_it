@@ -1,0 +1,10 @@
+{% extends 'library/base.html' %}2
+{% block title %} Главная {% endblock %}
+{% block content %}
+        <ul class="nav nav-pills" role="tablist">
+            <li role="presentation"><a href="{% url 'library:authors' %}">Authors</a></li>
+            <li role="presentation"><a href="{% url 'library:books' %}">Books</a></li>
+            <li role="presentation"><a href="{% url 'library:add_book' %}">Add Book</a></li>
+            <li role="presentation"><a href="{% url 'library:add_author' %}">Add Author</a></li>
+        </ul>
+{% endblock %}

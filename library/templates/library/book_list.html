@@ -1,0 +1,87 @@
+{% extends 'library/base.html' %}
+{% block title %} {% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% include 'library/popup.html' %}
+    {% endif %}
+    <div class="container-fluid">
+        <div class="container">
+            <form class="form-horizontal " action="{% url 'library:books' %}" method="get">
+                <div class="col-md-10">
+                    <div class="col-md-9">
+                    <h2>Поиск</h2>
+                        <div class="form-group">
+                            <div class="col-lg-6">
+                                <input class="form-control" type="text" name="find" placeholder="Поиск по названию"
+                                       value="{% if search %}{{ search }}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6">
+                                Выбрать автора:
+                                <select name="select_author" class="form-control">
+                                    <option value="">---------</option>
+                                    {% for author in authors %}
+                                        <option value="{{ author.id }}" {% if author.id == sel_author %}selected="selected"{% endif %}>
+                                            {{ author.first_name }} {{ author.last_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class='col-lg-6'>
+                                <div id="sandbox-container">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input type="text" class="input-sm form-control" name="start" />
+                                        <span class="input-group-addon">to</span>
+                                        <input type="text" class="input-sm form-control" name="end" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input class="btn btn-default" type="submit" value="Find">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h4>Сортировать:</h4>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <select name="sorted" class="form-control">
+                                <option value="author">Автор</option>
+                                <option value="date">Дате</option>
+                                <option value="title">Названию</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="container">
+            <div class="container">
+                <div class="col-sm-12">
+                    <table class="table table-striped">
+                        <tr>
+                            <th><label>Title:</label></th>
+                            <th><label>Author:</label></th>
+                            <th><label>Date</label></th>
+                        </tr>
+                        {% for book in object_list %}
+                            <tr>
+                                <td><a href="{% url "library:books_detail" book.id %}">{{ book.title }}</a></td>
+                                <td>
+                                    <a href="{% url "library:authors"%}?author_id={{ book.author.id }}" >
+                                        {{ book.author.last_name }} {{ book.author.first_name }}
+                                    </a>
+                                </td>
+                                <td> {% if book.date %} {{ book.date }} {% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

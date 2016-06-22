@@ -1,0 +1,22 @@
+{% extends 'library/base.html' %}
+{% block title %} {% endblock %}
+
+{% block content %}
+
+    <form class="form-horizontal" action="{% url 'library:add_author' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% for field in form %}
+            {% with errors=field.errors %}
+                <div class="form-group {% if errors %} has-error{% endif %}" >
+                    <div class=" col-sm-6">
+                        {{ field.label_tag }} {{ field }}
+
+                    </div>
+                    {% include 'library/if_errors.html' %}
+                </div>
+            {% endwith %}
+        {% endfor %}
+        <input class="btn btn-primary btn-lg active" type="submit" value="Save"/>
+    </form>
+{% endblock %}

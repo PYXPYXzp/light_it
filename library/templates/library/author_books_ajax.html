@@ -1,0 +1,43 @@
+<table class="table table-striped">
+    <tr>
+        <th>Название</th>
+        <th>Дата</th>
+        <th></th>
+    </tr>
+    {% for book in object_list %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{% if book.date %}{{ book.date }}{% endif %}</td>
+            <td>
+                <a class="btn btn-default" href="{% url "library:books_detail" book.id %}">
+                Detail</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+
+{#<div class="popover-content">#}
+{#        {% for book in object_list %}#}
+{#            <div class="row">#}
+{#                <div class="col-sm-8">#}
+{#                    <ul class="list-group">#}
+{#                        <li class="list-group-item">#}
+{#                            <div>#}
+{#                                <label>Title:</label> {{ book.title }}#}
+{#                            </div>#}
+{#                            <div>#}
+{#                                <label>Author:</label> {{ book.author.last_name }}#}
+{#                                 {{ book.author.first_name }}#}
+{#                            </div>#}
+{#                            <div>#}
+{#                                <label>Date</label> {{ book.date }}#}
+{#                            </div>#}
+{#                            <a class="btn btn-default" href="{% url "library:books_detail" book.id %}">Detail</a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </div>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </div>#}

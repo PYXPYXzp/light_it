@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {%load staticfiles%}
+    <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+    {#<script type="text/javascript" src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'bower_components/datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'library/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'library/ajax.js' %}"></script>
+    <script type="text/javascript" src="{% static 'library/csrf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'library/popup.js' %}"></script>
+
+
+    <link href="{% static 'lib/bootstrap.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bower_components/datepicker/css/bootstrap-datepicker.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'lib/bootstrap.css' %}" />
+</head>
+<body>
+    {% csrf_token %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+            data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+
+            <a class="navbar-brand" href="{% url 'library:books' %}">Brand</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       role="button" aria-haspopup="true"
+                       aria-expanded="false">MENU <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for tab in tabs %}
+                            <li role="presentation" class="{% if active == tab.label_tabs %} active {% endif %}">
+                                <a href="{% url tab.link_tabs %}"> {{ tab }}</a>
+                            </li>
+                        {% endfor %}
+{#                        <li role="presentation" {% if url == '/author/' %} class="active"{% endif %}><a href="{% url 'library:authors' %}">Authors</a></li>#}
+{#                        <li role="presentation" {% if url == '/' %} class="active"{% endif %}><a href="{% url 'library:books' %}">Books</a></li>#}
+{#                        <li role="presentation" {% if url == '/add_book/' %} class="active"{% endif %}><a href="{% url 'library:add_book' %}">Add Book</a></li>#}
+{#                        <li role="presentation" {% if url == '/add_author/' %} class="active"{% endif %}><a href="{% url 'library:add_author' %}">Add Author</a></li>#}
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search"
+                  action="{% url 'library:books' %}" method="get">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Поиск Книг" name="find">
+                </div>
+                <button type="submit" class="btn btn-default">Найти</button>
+            </form>
+        </div>
+
+    </div>
+</nav>
+{% block content %} {% endblock %}
+    <div class="footer">
+
+    </div>
+
+</body>
+</html>

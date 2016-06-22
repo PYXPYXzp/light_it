@@ -1,0 +1,19 @@
+{% extends 'library/base.html' %}
+{% block title %} Книги автора {% endblock %}
+
+{% block content %}
+    <a href="/">Главная</a>
+    {% for book in books %}
+        <div class="row">
+           <div class="col-sm-4">
+               <ul class="list-group">
+                   <a href="{% url 'library:books_detail' book.id %}">
+                       <li class="list-group-item">
+                           {{ book.title }}
+                       </li>
+                   </a>
+               </ul>
+           </div>
+        </div>
+    {% endfor %}
+{% endblock %}
