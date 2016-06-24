@@ -3,9 +3,11 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView
 import datetime
-
 from library.models import *
 from library.forms import *
+from library.serializers import AuthorSerializer, BooksSerializer
+from rest_framework import viewsets
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 
 class Tabs(object):
@@ -117,3 +119,13 @@ class AuthorBooks(Tabs, ListView):
         if author:
             query = Book.objects.filter(author=author)
         return query
+
+
+class APIAuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+
+class APIBookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BooksSerializer

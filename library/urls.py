@@ -1,6 +1,7 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from library.views import *
+from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     url(r'^author/$', AuthorList.as_view(), name='authors'),
@@ -10,3 +11,17 @@ urlpatterns = [
     url(r'^$', FindBook.as_view(), name='books'),
     url(r'^author_books/$', AuthorBooks.as_view(), name='author_books'),
 ]
+
+router = DefaultRouter()
+router.register(r'authors', APIAuthorViewSet)
+router.register(r'books', APIBookViewSet)
+
+urlpatterns += [
+    url(r'^api/', include(router.urls), name='api'),
+]
+
+# urlpatterns += [
+#    url(r'^api-author-list/$', APIAuthorList.as_view(), name='APIauthorList'),
+#     url(r'^api-book-list/$', APIBookList.as_view(), name='APIbookList'),
+#     url(r'^api-book-detail/(?P<pk>[0-9]+)/$', APIBookDetail.as_view()),
+# ]
