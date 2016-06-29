@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
 import datetime
 from library.models import *
 from library.forms import *
 from library.serializers import AuthorSerializer, BooksSerializer
 from rest_framework import viewsets
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+# from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 
 class Tabs(object):
@@ -129,3 +130,8 @@ class APIAuthorViewSet(viewsets.ModelViewSet):
 class APIBookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BooksSerializer
+
+
+def api_authors(request):
+
+    return render(request, 'library/angular_view.html')

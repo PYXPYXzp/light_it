@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^add_author/$', AddAuthor.as_view(), name='add_author'),
     url(r'^$', FindBook.as_view(), name='books'),
     url(r'^author_books/$', AuthorBooks.as_view(), name='author_books'),
+    # url(r'^test/$', test_ang, name='test'),
+    url(r'^library/$', api_authors, name='test'),
 ]
 
 router = DefaultRouter()

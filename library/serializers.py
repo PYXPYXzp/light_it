@@ -9,12 +9,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    # book_set = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Author
         fields = ('id', 'first_name', 'last_name', 'book_set')
 
 
 class BooksSerializer(serializers.ModelSerializer):
+    # author = serializers.StringRelatedField()
 
     class Meta:
         model = Book

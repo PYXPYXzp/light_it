@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="library">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
     {%load staticfiles%}
     <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bower_components/angular-route/angular-route.js' %}"></script>
     <script type="text/javascript" src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
     {#<script type="text/javascript" src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>#}
     <script type="text/javascript" src="{% static 'bower_components/datepicker/js/bootstrap-datepicker.min.js' %}"></script>
@@ -14,6 +16,8 @@
     <script type="text/javascript" src="{% static 'library/ajax.js' %}"></script>
     <script type="text/javascript" src="{% static 'library/csrf.js' %}"></script>
     <script type="text/javascript" src="{% static 'library/popup.js' %}"></script>
+    <script type="text/javascript" src="{% static 'library/ang_api.js' %}"></script>
+
 
 
     <link href="{% static 'lib/bootstrap.css' %}" rel="stylesheet">
@@ -36,20 +40,23 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                    <a class="dropdown-toggle" data-toggle="dropdown"
                        role="button" aria-haspopup="true"
                        aria-expanded="false">MENU <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        {% for tab in tabs %}
-                            <li role="presentation" class="{% if active == tab.label_tabs %} active {% endif %}">
-                                <a href="{% url tab.link_tabs %}"> {{ tab }}</a>
-                            </li>
-                        {% endfor %}
-{#                        <li role="presentation" {% if url == '/author/' %} class="active"{% endif %}><a href="{% url 'library:authors' %}">Authors</a></li>#}
-{#                        <li role="presentation" {% if url == '/' %} class="active"{% endif %}><a href="{% url 'library:books' %}">Books</a></li>#}
-{#                        <li role="presentation" {% if url == '/add_book/' %} class="active"{% endif %}><a href="{% url 'library:add_book' %}">Add Book</a></li>#}
-{#                        <li role="presentation" {% if url == '/add_author/' %} class="active"{% endif %}><a href="{% url 'library:add_author' %}">Add Author</a></li>#}
+                        {% if tabs %}
+                            {% for tab in tabs %}
+                                <li role="presentation" class="{% if active == tab.label_tabs %} active {% endif %}">
+                                    <a href="{% url tab.link_tabs %}"> {{ tab }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li role="presentation" {% if url == '/author/' %} class="active"{% endif %}><a href="#/authors">Authors</a></li>
+                            <li role="presentation" {% if url == '/' %} class="active"{% endif %}><a href="#/books">Books</a></li>
+                            <li role="presentation" {% if url == '/add_book/' %} class="active"{% endif %}><a href="#/add-book">Add Book</a></li>
+                            <li role="presentation" {% if url == '/add_author/' %} class="active"{% endif %}><a href="#/add-author">Add Author</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             </ul>
