@@ -1,4 +1,60 @@
-<div>{{ page }}</div>
-<ul>
-    <li ng-repeat="book in data"><a href="#/books/{{ book.id }}"> {{ book.title}}</a></li>
-</ul>
+<div class="container-fluid">
+    <div class="container">
+        <div class="form-horizontal">
+            <div class="col-md-9">
+                <h2>Поиск</h2>
+                <div class="form-group">
+                    <div class="col-lg-6">
+                        <input type="text" ng-model="member">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-6">
+                        Выбрать автора:
+                        <select ng-model="author"
+                                ng-options="book.author as book.author.first_name for book in books"
+                                class="form-control" name="select_author">
+                            <option value="">-------</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class='col-lg-6'>
+                        <div id="sandbox-container">
+                            <div class="input-daterange input-group" id="datepicker">
+                                <input type="text" class="input-sm form-control" name="start" />
+                                <span class="input-group-addon">to</span>
+                                <input type="text" class="input-sm form-control" name="end" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="container">
+            <div class="col-sm-12">
+                <table class="table table-striped">
+                    <tr>
+                        <th><label>Title:</label></th>
+                        <th><label>Author:</label></th>
+                        <th><label>Date</label></th>
+                    </tr>
+
+                    <tr ng-repeat="book in books | filter:{title:member} | filter:{author: author}">
+                        <td>
+                            <a href="#/books/{{ book.id }}"> {{ book.title }}</a>
+                        </td>
+                        <td>
+                            <a href="">{{ book.author.last_name }} {{ book.author.first_name }}</a>
+                        </td>
+                        <td>
+                            {{ book.date }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
