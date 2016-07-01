@@ -1,4 +1,4 @@
-<div class="container-fluid">
+    <div class="container-fluid">
     <div class="container">
         <div class="form-horizontal">
             <div class="col-md-9">
@@ -11,20 +11,32 @@
                 <div class="form-group">
                     <div class="col-lg-6">
                         Выбрать автора:
-                        <select ng-model="author"
-                                ng-options="book.author as book.author.first_name for book in books"
+                        <select ng-model="MyFilter.selectedAuthorID"
+                                ng-options="author.id as author.first_name for author in books | unique"
                                 class="form-control" name="select_author">
-                            <option value="">-------</option>
+                            <option value="" selected>-------</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class='col-lg-6'>
-                        <div id="sandbox-container">
-                            <div class="input-daterange input-group" id="datepicker">
-                                <input type="text" class="input-sm form-control" name="start" />
-                                <span class="input-group-addon">to</span>
-                                <input type="text" class="input-sm form-control" name="end" />
+                        <h4>Popup</h4>
+                        <div class="row" ng-controller="DatepickerPopup">
+                            <div class="col-md-6">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="dt1" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -41,8 +53,9 @@
                         <th><label>Author:</label></th>
                         <th><label>Date</label></th>
                     </tr>
-
-                    <tr ng-repeat="book in books | filter:{title:member} | filter:{author: author}">
+                    {{ MyFilter.selectedAuthorID }}
+                    {{ member }}
+                    <tr ng-repeat="book in books | filter:{title:member} | filter:{ author:{id:MyFilter.selectedAuthorID||undefined}}">
                         <td>
                             <a href="#/books/{{ book.id }}"> {{ book.title }}</a>
                         </td>

@@ -14,5 +14,5 @@ $(document).ready(function() {
             }
         })
     });
-    $(".books_author[data-authorid="+author_id+"]").click();
+    $(".books_author[data-authorid="+ author_id +"]").click();
 });
