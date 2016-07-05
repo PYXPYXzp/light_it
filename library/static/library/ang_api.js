@@ -25,18 +25,36 @@ app.config(function ($routeProvider) {
             templateUrl: '/static/library/templates/book_detail.html',
             controller: 'BookDetailController'
         });
+    // $routeProvider.when('/author/:id',
+    //     {
+    //         templateUrl: '/static/library/templates/author_books.html',
+    //         controller: 'AuthorBooksCtrl'
+    //     })
 });
 app.controller('AuthorsController', function ($scope, $http) {
     $http({
         method:'GET',
         url: '/api/authors'
     }).then(function (responce) {
-        $scope.data = responce.data;
+        $scope.authors = responce.data;
     });
-    $scope.page = 'Authors'
+    $scope.show_books = function (id) {
+        $scope.id = id
+        
+    }
 });
 
-app.controller('BooksController', function ($scope, $http) {
+// app.controller('AuthorBooksCtrl', function ($scope, $http, $routeParams) {
+//     var author_id = $routeParams["id"];
+//     $http({
+//         method: "GET",
+//         url: ''
+//     }).then(function (responce) {
+//         $scope.author_books = responce.data;
+//     })
+// });
+
+app.controller('BooksController', function ($scope, $http, SaveDate) {
     $http({
         method: "GET",
         url: '/api/books'
@@ -44,10 +62,17 @@ app.controller('BooksController', function ($scope, $http) {
         $scope.books = responce.data;
     });
     // $scope.filter_by_title = '';
-    $scope.page = 'Books'
+    $scope.page = 'Books';
     $scope.MyFilter = {
         selectedAuthorID:""
-    }
+    };
+    $scope.propertyName = 'date';
+    $scope.sortBy = function(propertyName) {
+        $scope.reverse = ($scope.propertyName === propertyName);
+        $scope.propertyName = propertyName;
+    };
+    $scope.date = SaveDate.dates
+
 });
 
 app.controller('AddAuthorController', function ($scope, $http) {
@@ -91,98 +116,148 @@ app.filter('unique', function(){
         return unique_authors
     }
 });
-app.controller('DatepickerPopup', function ($scope) {
-  $scope.today = function() {
-    $scope.dt = new Date();
-  };
-  $scope.today();
+
+app.filter('dateRange', function(){
+
+    return function(input, startDate, endDate) {
+       angular.forEach(input, function(book){
+
+        if(book.date.getTime() >= startDate.getTime() && book.date.getTime() <= endDate.getTime())   {
+            return book;
+        }
+       });
+
+    };
+});
+
+app.controller('DatepickerPopup', function ($scope, SaveDate) {
+    $scope.today = function() {
+      $scope.dt1 = new Date();
+      $scope.dt2 = new Date();
+    };
+    $scope.today();
 
 
-  $scope.inlineOptions = {
+    $scope.inlineOptions = {
     customClass: getDayClass,
     minDate: new Date(),
     showWeeks: false
-  };
+    };
 
-  $scope.dateOptions = {
+    $scope.dateOptions = {
     dateDisabled: disabled,
     formatYear: 'yy',
-    maxDate: new Date(2020, 5, 22),
-    minDate: new Date(),
+    // maxDate: new Date(2020, 5, 22),
+    // minDate: new Date(),
     startingDay: 1
-  };
+    };
 
-  // Disable weekend selection
-  function disabled(data) {
+
+    // Disable weekend selection
+    function disabled(data) {
     var date = data.date,
       mode = data.mode;
-    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
-  }
+    return mode === 'month' && (date.getDay() === 0 || date.getDay() === 6);
+    }
+    // $scope.dates = {
+    //     dt1: '',
+    //     dt2: ''
+    // };
+    // SaveDate.dates = $scope.dates;
 
-  $scope.toggleMin = function() {
+    // SaveDate.dateEnd = $scope.dt2;
+
+    $scope.toggleMin = function() {
     $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
     $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
-  };
+    };
 
-  $scope.toggleMin();
+    $scope.toggleMin();
 
-  $scope.open1 = function() {
+    $scope.open1 = function() {
     $scope.popup1.opened = true;
-  };
+    };
 
-  $scope.open2 = function() {
+    $scope.open2 = function() {
     $scope.popup2.opened = true;
-  };
+    };
 
-  $scope.setStartDate = function(year, month, day) {
-    $scope.dt = new Date(year, month, day);
-  };
-  $scope.setStopDate1 = function(year, month, day) {
-    $scope.dt1 = new Date(year, month, day);
-  };
 
-  $scope.formats = ['yyyy-MM-dd', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
-  $scope.altInputFormats = ['M!/d!/yyyy'];
+    $scope.setStartDate = function(year, month, day) {
+      $scope.dt1 = new Date(year, month, day);
+    };
+    $scope.setStopDate1 = function(year, month, day) {
+      $scope.dt2 = new Date(year, month, day);
+    };
 
-  $scope.popup1 = {
+    $scope.formats = ['yyyy-MM-dd', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
+    $scope.altInputFormats = ['M!/d!/yyyy'];
+
+    $scope.popup1 = {
     opened: false
-  };
+    };
 
-  $scope.popup2 = {
+    $scope.popup2 = {
     opened: false
-  };
+    };
 
-  // var tomorrow = new Date();
-  // tomorrow.setDate(tomorrow.getDate() + 1);
-  // var afterTomorrow = new Date();
-  // afterTomorrow.setDate(tomorrow.getDate() + 1);
-  // $scope.events = [
-  //   {
-  //     date: tomorrow,
-  //     status: 'full'
-  //   },
-  //   {
-  //     date: afterTomorrow,
-  //     status: 'partially'
-  //   }
-  // ];
+
 
   function getDayClass(data) {
     var date = data.date,
       mode = data.mode;
-    if (mode === 'day') {
-      var dayToCheck = new Date(date).setHours(0,0,0,0);
+      if (mode === 'day') {
+          var dayToCheck = new Date(date).setHours(0,0,0,0);
 
-      for (var i = 0; i < $scope.events.length; i++) {
-        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+          for (var i = 0; i < $scope.events.length; i++) {
+              var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
 
-        if (dayToCheck === currentDay) {
-          return $scope.events[i].status;
-        }
+              if (dayToCheck === currentDay) {
+                  return $scope.events[i].status;
+              }
+          }
       }
-    }
 
     return '';
   }
+});
+
+app.factory("SaveDate", function () {
+    return {
+        dates: {
+            dt1: '',
+            dt2: ''
+        }
+    }
+});
+
+app.filter('dateRange', function() {
+   return function(input, startDate, endDate) {
+
+      var retArray = [];
+
+      angular.forEach(input, function(obj){
+        var receivedDate = Date(obj.date);
+
+        if(receivedDate >= startDate && receivedDate <= endDate) {
+            retArray.push(obj);         
+        }
+      });
+
+      return retArray;
+   };
+}); 
+
+app.controller('DropdownCtrl', function ($scope) {
+
+  $scope.status = {
+    isopen: false
+  };
+
+    $scope.toggleDropdown = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.status.isopen = !$scope.status.isopen;
+  };
 });

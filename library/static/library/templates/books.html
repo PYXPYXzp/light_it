@@ -24,7 +24,7 @@
                         <div class="row" ng-controller="DatepickerPopup">
                             <div class="col-md-6">
                                 <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dates.dt1" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
@@ -32,7 +32,7 @@
                             </div>
                             <div class="col-md-6">
                                 <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup ng-model="dt1" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dates.dt2" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
                                     </span>
@@ -42,8 +42,28 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div ng-controller="DropdownCtrl">
+                            <!-- Single button -->
+                            <div class="btn-group" uib-dropdown is-open="status.isopen">
+                              <button id="single-button" type="button" class="btn btn" uib-dropdown-toggle >
+                                Сортировать <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                <li role="menuitem"> <a ng-click="sortBy('title')">Title</a></li>
+                                <li role="menuitem"> <a ng-click="sortBy('author.last_name')">Author</a></li>
+                                <li role="menuitem"> <a ng-click="sortBy('date')">Date</a></li>
+                              </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
     <div class="container">
         <div class="container">
             <div class="col-sm-12">
@@ -51,19 +71,23 @@
                     <tr>
                         <th><label>Title:</label></th>
                         <th><label>Author:</label></th>
-                        <th><label>Date</label></th>
+                        <th><label>Date:</label></th>
+                        <th><label>Detail:</label></th>
                     </tr>
                     {{ MyFilter.selectedAuthorID }}
                     {{ member }}
-                    <tr ng-repeat="book in books | filter:{title:member} | filter:{ author:{id:MyFilter.selectedAuthorID||undefined}}">
+                    <tr ng-repeat="book in books | filter:{title:member} |filter:{ author:{id:MyFilter.selectedAuthorID||undefined}}| orderBy: propertyName">
                         <td>
-                            <a href="#/books/{{ book.id }}"> {{ book.title }}</a>
+                             {{ book.title }}
                         </td>
                         <td>
                             <a href="">{{ book.author.last_name }} {{ book.author.first_name }}</a>
                         </td>
                         <td>
                             {{ book.date }}
+                        </td>
+                        <td>
+                            <a class="btn btn-default" href="#/books/{{ book.id }}">Детали</a>
                         </td>
                     </tr>
                 </table>

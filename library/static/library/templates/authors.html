@@ -1,5 +1,46 @@
 
-<div>{{ page }}</div>
-<ul>
-    <li ng-repeat="author in data">{{ author.first_name}} {{ author.last_name }}</li>
-</ul>
+<div class="container">
+    <div class="col-md-6">
+        <h2>Авторы</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Книг написал</th>
+                <th>Список книг</th>
+            </tr>
+            <tr ng-repeat="author in authors">
+                <td>{{ author.first_name }}</td>
+                <td>{{ author.last_name }}</td>
+                <td>{{ author.books.length }}</td>
+                <td><a class="btn btn-default books_author" ng-click=show_books(author.id) >Книги автора</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div ng-hide="false">
+            <table class="table table-striped" ng-repeat="author in authors | filter:{id:id}">
+                    <tr>
+                        <th><label>Title:</label></th>
+                        <th><label>Date:</label></th>
+                        <th><label>Detail:</label></th>
+                    </tr>
+                    {{ MyFilter.selectedAuthorID }}
+                    {{ member }}
+                    <tr ng-repeat="book in author.books">
+                        <td>
+                             {{ book.title }}
+                        </td>
+                        <td>
+                            {{ book.date }}
+                        </td>
+                        <td>
+                            <a class="btn btn-default" href="#/books/{{ book.id }}">Детали</a>
+                        </td>
+                    </tr>
+                </table>
+        </div>
+    </div>
+</div>
+
+
