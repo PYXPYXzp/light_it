@@ -3,6 +3,7 @@ from django.conf.urls import url, include
 from library.views import *
 from rest_framework.routers import DefaultRouter
 
+
 urlpatterns = [
     url(r'^author/$', AuthorList.as_view(), name='authors'),
     url(r'^book/(?P<pk>\d+)/$', BookDetail.as_view(), name='books_detail'),

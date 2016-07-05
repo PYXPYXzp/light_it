@@ -1,3 +1,4 @@
+
 app = angular.module('library', ["ngRoute", "ui.bootstrap"]);
 app.config(function ($routeProvider) {
     $routeProvider.when('/authors',
@@ -12,12 +13,12 @@ app.config(function ($routeProvider) {
         });
     $routeProvider.when('/add-author',
         {
-            templateUrl:'/static/library/templates/test.html',
+            templateUrl:'/static/library/templates/add_author.html',
             controller: 'AddAuthorController'
         });
     $routeProvider.when('/add-book',
         {
-            templateUrl:'/static/library/templates/test.html',
+            templateUrl:'/static/library/templates/add_book.html',
             controller: 'AddBookController'
         });
     $routeProvider.when('/books/:id',
@@ -31,6 +32,7 @@ app.config(function ($routeProvider) {
     //         controller: 'AuthorBooksCtrl'
     //     })
 });
+
 app.controller('AuthorsController', function ($scope, $http) {
     $http({
         method:'GET',
@@ -38,21 +40,12 @@ app.controller('AuthorsController', function ($scope, $http) {
     }).then(function (responce) {
         $scope.authors = responce.data;
     });
-    $scope.show_books = function (id) {
+    $scope.author_id = function (id) {
         $scope.id = id
+        $scope.books_show = true
         
     }
 });
-
-// app.controller('AuthorBooksCtrl', function ($scope, $http, $routeParams) {
-//     var author_id = $routeParams["id"];
-//     $http({
-//         method: "GET",
-//         url: ''
-//     }).then(function (responce) {
-//         $scope.author_books = responce.data;
-//     })
-// });
 
 app.controller('BooksController', function ($scope, $http, SaveDate) {
     $http({

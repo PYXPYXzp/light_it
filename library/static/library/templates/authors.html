@@ -13,12 +13,12 @@
                 <td>{{ author.first_name }}</td>
                 <td>{{ author.last_name }}</td>
                 <td>{{ author.books.length }}</td>
-                <td><a class="btn btn-default books_author" ng-click=show_books(author.id) >Книги автора</a></td>
+                <td><a class="btn btn-default books_author" ng-click=author_id(author.id)>Книги автора</a></td>
             </tr>
         </table>
     </div>
     <div class="col-md-6">
-        <div ng-hide="false">
+        <div ng-show="books_show">
             <table class="table table-striped" ng-repeat="author in authors | filter:{id:id}">
                     <tr>
                         <th><label>Title:</label></th>
