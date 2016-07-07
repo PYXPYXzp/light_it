@@ -1,6 +1,8 @@
 
-app = angular.module('library', ["ngRoute", "ui.bootstrap"]);
-app.config(function ($routeProvider) {
+app = angular.module('library', ["ngRoute", "ui.bootstrap", 'ngResource']);
+app.config(function ($routeProvider, $httpProvider) {
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $routeProvider.when('/authors',
         {
             templateUrl:'/static/library/templates/authors.html',
@@ -33,19 +35,27 @@ app.config(function ($routeProvider) {
     //     })
 });
 
-app.controller('AuthorsController', function ($scope, $http) {
-    $http({
-        method:'GET',
-        url: '/api/authors'
-    }).then(function (responce) {
-        $scope.authors = responce.data;
+app.factory("Authors", function($resource) {
+    return $resource('/api/authors/:id')
     });
+
+app.controller('AuthorsController', function ($scope, Authors) {
+    Authors.query(function (data) {
+        $scope.authors = data
+    });
+    // $http({
+    //     method:'GET',
+    //     url: '/api/authors'
+    // }).then(function (responce) {
+    //     $scope.authors = responce.data;
+    // });
     $scope.author_id = function (id) {
-        $scope.id = id
+        $scope.id = id;
         $scope.books_show = true
-        
+
     }
 });
+
 
 app.controller('BooksController', function ($scope, $http, SaveDate) {
     $http({
@@ -69,15 +79,18 @@ app.controller('BooksController', function ($scope, $http, SaveDate) {
 });
 
 app.controller('AddAuthorController', function ($scope, $http) {
-    $http({
-        method: 'GET',
-        url: '/api/books'
-    });
-    $scope.page = 'addAuthor'
+    $scope.save = function (author) {
+            $http.post('/api/authors/', author)
+    }
 });
 
-app.controller('AddBookController', function ($scope) {
-    $scope.page = 'addBook'
+app.controller('AddBookController', function ($scope, $http) {
+    $http({
+        method: "GET",
+        url: '/api/books'
+    }).then(function (responce) {
+        $scope.books = responce.data;
+    });
 });
 
 app.controller('BookDetailController', function ($scope, $http, $routeParams) {

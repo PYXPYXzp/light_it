@@ -1,1 +1,9 @@
-{{ page }}
+<div ng-controller="AddAuthorController">
+    <form class="form-horizontal" name="AddAuthorForm">
+        First Name:<br>
+        <input ng-model="author.first_name" required placeholder="Введите имя писателя"><br>
+        Last Name:<br>
+        <input ng-model="author.last_name" required placeholder="Введите фамилию писателя"><br>
+        <input class="btn btn " type="submit" ng-click="save(author)" value="Save"/>
+    </form>
+</div>
